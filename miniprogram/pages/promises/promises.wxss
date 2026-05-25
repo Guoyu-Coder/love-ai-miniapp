@@ -1,0 +1,25 @@
+/* ── 私密约定样式 ── */
+.form-card { margin-top: 16rpx; }
+.form-title { font-size: 28rpx; font-weight: 600; margin-bottom: 16rpx; display: block; }
+.form-row { display: flex; justify-content: space-between; align-items: center; margin-top: 16rpx; }
+.freq-picker { display: flex; gap: 8rpx; }
+.freq-item {
+  padding: 8rpx 16rpx;
+  border-radius: 24rpx;
+  background: #FFF5F7;
+  font-size: 22rpx;
+  color: var(--text-light);
+}
+.freq-item.active { background: var(--pink-pale); color: var(--pink-dark); font-weight: 600; }
+
+.promises-list { margin-top: 8rpx; }
+.promise-item { margin-bottom: 16rpx; }
+.promise-item.done { opacity: 0.5; }
+.promise-top { display: flex; justify-content: space-between; align-items: center; margin-bottom: 8rpx; }
+.promise-title { font-size: 30rpx; font-weight: 700; }
+.check-circle { font-size: 36rpx; color: var(--pink-light); }
+.promise-content { font-size: 24rpx; color: var(--text-light); display: block; margin-bottom: 12rpx; }
+.promise-footer { display: flex; align-items: center; gap: 12rpx; }
+.promise-streak { font-size: 22rpx; color: #FF9AB5; }
+.promise-delete { width: 44rpx; height: 44rpx; display: flex; align-items: center; justify-content: center; font-size: 24rpx; color: #CCC; }
+.promise-delete:active { color: #E8668A; }

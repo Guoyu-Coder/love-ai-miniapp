@@ -1,0 +1,147 @@
+/* ── 情侣档案页 ── */
+
+.profile-hero {
+  position: relative;
+  background: linear-gradient(180deg, #FF7BA6 0%, #FFB3CC 60%, #FFF0F3 100%);
+  padding: 60rpx 32rpx 80rpx;
+  text-align: center;
+  border-radius: 0 0 60rpx 60rpx;
+  overflow: hidden;
+}
+.hero-glow {
+  position: absolute;
+  top: -80rpx;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 360rpx;
+  height: 360rpx;
+  background: radial-gradient(circle, rgba(255,255,255,0.3) 0%, transparent 70%);
+  border-radius: 50%;
+}
+
+.profile-avatars {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 32rpx;
+  position: relative;
+  z-index: 1;
+}
+.profile-avatar-box {
+  position: relative;
+}
+.profile-avatar {
+  width: 140rpx;
+  height: 140rpx;
+  border-radius: 50%;
+  border: 5rpx solid rgba(255,255,255,0.9);
+  background: #FFE0EA;
+  box-shadow: 0 8rpx 30rpx rgba(255,123,166,0.3);
+}
+.avatar-edit-badge {
+  position: absolute;
+  bottom: 4rpx;
+  right: 4rpx;
+  width: 40rpx;
+  height: 40rpx;
+  background: #FFF;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 20rpx;
+  box-shadow: 0 2rpx 8rpx rgba(0,0,0,0.1);
+}
+.heart-pulse {
+  font-size: 56rpx;
+  color: #FFF;
+  margin: 0 28rpx;
+  text-shadow: 0 2rpx 12rpx rgba(255,123,166,0.4);
+  animation: heartbeat 1.5s ease-in-out infinite;
+}
+@keyframes heartbeat {
+  0%, 100% { transform: scale(1); }
+  15% { transform: scale(1.25); }
+  30% { transform: scale(1); }
+  45% { transform: scale(1.15); }
+  60% { transform: scale(1); }
+}
+
+/* 统计 */
+.hero-stats {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 40rpx;
+  position: relative;
+  z-index: 1;
+}
+.hero-stat-item {
+  text-align: center;
+}
+.hero-stat-num {
+  font-size: 48rpx;
+  font-weight: 800;
+  color: #FFF;
+  display: block;
+  text-shadow: 0 2rpx 8rpx rgba(255,123,166,0.3);
+}
+.hero-stat-label {
+  font-size: 22rpx;
+  color: rgba(255,255,255,0.85);
+  margin-top: 4rpx;
+  display: block;
+}
+.hero-stat-divider {
+  width: 2rpx;
+  height: 40rpx;
+  background: rgba(255,255,255,0.4);
+}
+
+/* 表单 */
+.form-group { margin-bottom: 24rpx; }
+.form-label { font-size: 26rpx; font-weight: 600; margin-bottom: 10rpx; display: block; color: var(--text); }
+.double-input { display: flex; align-items: center; gap: 12rpx; }
+.double-input .input-box { flex: 1; }
+.input-and { font-size: 24rpx; color: var(--text-light); flex-shrink: 0; }
+.form-picker {
+  background: #FFF5F7; border: 2rpx solid #FFE0EA;
+  border-radius: var(--radius); padding: 22rpx 28rpx;
+  font-size: 28rpx; color: var(--text);
+}
+
+/* 位置 */
+.location-row { display: flex; align-items: center; gap: 12rpx; }
+.location-picker { flex: 1; }
+.gps-btn {
+  width: 72rpx; height: 72rpx;
+  background: #FFF5F7;
+  border: 2rpx solid #FFE0EA;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+.gps-btn:active { background: #FFE0EA; }
+.gps-btn.loading { animation: pulse 1s infinite; }
+.gps-icon { font-size: 32rpx; }
+.gps-dot { font-size: 32rpx; color: var(--pink-light); letter-spacing: 2rpx; }
+@keyframes pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.4; }
+}
+
+/* 纪念日 */
+.anni-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 14rpx 0;
+  border-bottom: 1rpx solid #FFF5F7;
+}
+.anni-item:last-child { border-bottom: none; }
+.anni-left { display: flex; align-items: center; gap: 14rpx; }
+.anni-icon { font-size: 32rpx; }
+.anni-label { font-size: 26rpx; font-weight: 500; }
+.anni-date-right { font-size: 24rpx; color: var(--text-light); }

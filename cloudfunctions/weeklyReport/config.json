@@ -1,0 +1,9 @@
+{
+  "triggers": [
+    { "name": "weeklyReport", "type": "timer", "config": "0 0 10 * * 0 *" }
+  ],
+  "env": {
+    "DEEPSEEK_KEY": "sk-056af2f3c3ef462584fbe24bd24643af",
+    "DEEPSEEK_BASE_URL": "https://api.deepseek.com"
+  }
+}

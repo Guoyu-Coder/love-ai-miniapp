@@ -1,0 +1,28 @@
+/* ── 心动瞬间样式 ── */
+.quick-add { margin-top: 16rpx; }
+.quick-actions { display: flex; align-items: center; gap: 12rpx; margin-top: 16rpx; }
+.mood-quick {
+  font-size: 36rpx;
+  padding: 8rpx;
+  border-radius: 50%;
+  opacity: 0.4;
+}
+.mood-quick.active { opacity: 1; transform: scale(1.2); }
+
+.moments-grid { padding: 24rpx; }
+.moment-card {
+  background: #FFFFFF;
+  border-radius: var(--radius-lg);
+  padding: 24rpx;
+  margin-bottom: 16rpx;
+  box-shadow: 0 2rpx 12rpx rgba(255,123,166,0.06);
+  border-left: 4rpx solid var(--pink-light);
+}
+.moment-card.dark { border-left-color: #E0E0E0; opacity: 0.7; }
+.moment-header { display: flex; justify-content: space-between; margin-bottom: 12rpx; }
+.moment-mood { font-size: 36rpx; }
+.moment-date { font-size: 22rpx; color: var(--text-light); }
+.moment-content { font-size: 28rpx; line-height: 1.6; display: block; }
+.moment-tags { margin-top: 12rpx; display: flex; gap: 8rpx; }
+.moment-delete { width: 44rpx; height: 44rpx; display: flex; align-items: center; justify-content: center; font-size: 24rpx; color: #CCC; }
+.moment-delete:active { color: #E8668A; }

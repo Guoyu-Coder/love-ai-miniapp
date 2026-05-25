@@ -1,0 +1,56 @@
+{
+  "pages": [
+    "pages/index/index",
+    "pages/chat/chat",
+    "pages/dates/dates",
+    "pages/dates/detail/detail",
+    "pages/wishes/wishes",
+    "pages/moments/moments",
+    "pages/promises/promises",
+    "pages/reports/reports",
+    "pages/achievements/achievements",
+    "pages/profile/profile",
+    "pages/settings/settings"
+  ],
+  "window": {
+    "backgroundTextStyle": "light",
+    "navigationBarBackgroundColor": "#FF7BA6",
+    "navigationBarTitleText": "♥ 我们的空间",
+    "navigationBarTextStyle": "white",
+    "backgroundColor": "#FFF0F3"
+  },
+  "tabBar": {
+    "color": "#C4C4C4",
+    "selectedColor": "#FF7BA6",
+    "backgroundColor": "#FFFFFF",
+    "borderStyle": "white",
+    "list": [
+      {
+        "pagePath": "pages/index/index",
+        "text": "我们的家",
+        "iconPath": "images/tab-home.png",
+        "selectedIconPath": "images/tab-home-active.png"
+      },
+      {
+        "pagePath": "pages/chat/chat",
+        "text": "小爱AI",
+        "iconPath": "images/tab-ai.png",
+        "selectedIconPath": "images/tab-ai-active.png"
+      },
+      {
+        "pagePath": "pages/dates/dates",
+        "text": "记忆馆",
+        "iconPath": "images/tab-dates.png",
+        "selectedIconPath": "images/tab-dates-active.png"
+      },
+      {
+        "pagePath": "pages/settings/settings",
+        "text": "我的",
+        "iconPath": "images/tab-settings.png",
+        "selectedIconPath": "images/tab-settings-active.png"
+      }
+    ]
+  },
+  "style": "v2",
+  "sitemapLocation": "sitemap.json"
+}

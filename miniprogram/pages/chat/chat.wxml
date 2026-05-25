@@ -1,0 +1,175 @@
+<!-- ♥ AI Agent 对话页面 - 多对话版 -->
+<view class="chat-page page-enter">
+
+  <!-- ══ 侧边抽屉遮罩 ══ -->
+  <view class="drawer-mask {{drawerOpen ? 'show' : ''}}" bindtap="closeDrawer"></view>
+
+  <!-- ══ 对话列表侧边栏 ══ -->
+  <view class="drawer {{drawerOpen ? 'open' : ''}}">
+    <view class="drawer-header">
+      <text class="drawer-title">💬 对话列表</text>
+      <view class="drawer-new-btn" bindtap="newConversation">
+        <text>＋ 新建</text>
+      </view>
+    </view>
+    <scroll-view scroll-y class="drawer-list" enhanced show-scrollbar="{{false}}">
+      <block wx:for="{{conversations}}" wx:key="id">
+        <view class="conv-item {{activeConvId === item.id ? 'active' : ''}}"
+          bindtap="switchConv" data-id="{{item.id}}">
+          <view class="conv-item-main">
+            <text class="conv-title">{{item.title || '新对话'}}</text>
+            <text class="conv-meta">{{item.messageCount}} 条消息 · {{item.updatedText}}</text>
+          </view>
+          <view class="conv-delete" catchtap="deleteConv" data-id="{{item.id}}">
+            <text>✕</text>
+          </view>
+        </view>
+      </block>
+      <view class="empty-state" wx:if="{{conversations.length === 0}}" style="padding:60rpx 0;">
+        <text class="icon">💬</text>
+        <text style="font-size:24rpx;">还没有对话</text>
+      </view>
+    </scroll-view>
+  </view>
+
+  <!-- ══ 顶部栏 ══ -->
+  <view class="top-bar">
+    <view class="top-left" bindtap="openDrawer">
+      <text class="top-icon">☰</text>
+      <text class="top-title">{{currentTitle || '小爱 AI'}}</text>
+    </view>
+    <view class="top-right">
+      <view class="top-action" bindtap="newConversation">
+        <text>＋</text>
+      </view>
+      <view class="top-action" bindtap="clearCurrentConv">
+        <text>🗑️</text>
+      </view>
+    </view>
+  </view>
+
+  <!-- ══ 消息列表 ══ -->
+  <scroll-view class="msg-list" scroll-y scroll-into-view="{{messages.length > 0 ? 'msg-' + (messages.length - 1) : ''}}" scroll-with-animation enhanced show-scrollbar="{{false}}">
+
+    <!-- 空对话欢迎区 -->
+    <view wx:if="{{messages.length === 0}}" class="welcome-area">
+      <text class="welcome-icon">🤖💕</text>
+      <text class="welcome-title">我是小爱，你们的专属 AI 伴侣</text>
+      <text class="welcome-sub">可以和我聊天、让我帮你：</text>
+      <view class="welcome-chips">
+        <view class="welcome-chip" bindtap="quickAsk" data-text="帮我们策划一个周末约会吧～">🎯 策划约会</view>
+        <view class="welcome-chip" bindtap="quickAsk" data-text="帮我们写一段祝福语">💌 写祝福语</view>
+        <view class="welcome-chip" bindtap="quickAsk" data-text="我想记录一次约会">📸 记录约会</view>
+        <view class="welcome-chip" bindtap="quickAsk" data-text="我有个愿望想加进去">✨ 加愿望</view>
+        <view class="welcome-chip" bindtap="quickAsk" data-text="帮我生成这一周的恋爱报告">📊 周报</view>
+        <view class="welcome-chip" bindtap="requestMediation">🕊️ 请求调解</view>
+        <view class="welcome-chip" bindtap="confirmMediation">🤝 确认调解</view>
+      </view>
+    </view>
+
+    <!-- 消息 -->
+    <block wx:for="{{messages}}" wx:key="index">
+      <view class="msg-item {{item.role}}" id="msg-{{index}}">
+        <view class="msg-avatar" wx:if="{{item.role === 'assistant'}}">
+          <text class="avatar-emoji">🤖</text>
+        </view>
+        <view class="msg-bubble {{item.role}}">
+          <text>{{item.content}}</text>
+        </view>
+        <view class="msg-avatar" wx:if="{{item.role === 'user'}}">
+          <text class="avatar-emoji">😊</text>
+        </view>
+      </view>
+    </block>
+
+    <!-- Agent 思考中 -->
+    <view class="msg-item assistant" wx:if="{{thinking}}">
+      <view class="msg-avatar"><text class="avatar-emoji">🤖</text></view>
+      <view class="msg-bubble thinking">
+        <view class="thinking-dots">
+          <view class="dot"></view><view class="dot"></view><view class="dot"></view>
+        </view>
+      </view>
+    </view>
+
+    <view class="tool-hint" wx:if="{{toolHint}}">
+      <text class="tool-hint-icon">🔧</text>
+      <text>{{toolHint}}</text>
+    </view>
+
+    <!-- 推理过程可视化 -->
+    <view class="thinking-steps" wx:if="{{thinkingSteps.length > 0 && !thinking}}">
+      <view class="steps-header" bindtap="toggleSteps">
+        <text class="steps-header-icon">{{showSteps ? '🔽' : '🔍'}}</text>
+        <text class="steps-header-text">小爱的思考过程</text>
+        <text class="steps-count">{{thinkingSteps.length}} 步</text>
+        <text class="steps-toggle">{{showSteps ? '收起' : '展开'}}</text>
+      </view>
+      <view class="steps-list {{showSteps ? 'open' : ''}}">
+        <view class="step-item {{item.phase}}" wx:for="{{thinkingSteps}}" wx:key="index">
+          <text class="step-icon">
+            {{item.phase === 'thinking' ? '💭' : (item.phase === 'tool_call' ? '🔧' : '📋')}}
+          </text>
+          <view class="step-body">
+            <text class="step-text" wx:if="{{item.phase === 'thinking'}}">{{item.text}}</text>
+            <text class="step-text" wx:if="{{item.phase === 'tool_call'}}">
+              调用工具：{{item.name}}
+            </text>
+            <text class="step-text step-result" wx:if="{{item.phase === 'tool_result'}}">
+              {{item.summary}}
+            </text>
+          </view>
+        </view>
+      </view>
+    </view>
+  </scroll-view>
+
+  <!-- ══ 快捷标签 ══ -->
+  <view class="quick-chips" wx:if="{{messages.length > 0}}">
+    <scroll-view scroll-x class="chips-scroll" enhanced show-scrollbar="{{false}}">
+      <text class="chip" bindtap="quickAsk" data-text="帮我们策划一个约会～">🎯 策划约会</text>
+      <text class="chip" bindtap="quickAsk" data-text="帮我们写一段祝福语">💌 写祝福</text>
+      <text class="chip" bindtap="quickAsk" data-text="帮我记录一次约会">📸 记约会</text>
+      <text class="chip" bindtap="quickAsk" data-text="我有个愿望想加进去">✨ 加愿望</text>
+      <text class="chip" bindtap="quickAsk" data-text="帮我生成这一周的恋爱报告">📊 周报</text>
+      <text class="chip" bindtap="requestMediation">🕊️ 请求调解</text>
+      <text class="chip" bindtap="confirmMediation">🤝 确认调解</text>
+      <text class="chip" bindtap="quickAsk" data-text="帮我生成一张可以发朋友圈的恋爱卡片">📤 分享卡</text>
+    </scroll-view>
+  </view>
+
+  <!-- 雷区3: 调解状态横幅 -->
+  <view class="mediation-banner {{mediationStatus}}" wx:if="{{mediationStatus}}">
+    <text class="mediation-banner-icon">{{mediationStatus === 'requested' ? '⏳' : '✅'}}</text>
+    <view class="mediation-banner-text">
+      <text class="mediation-banner-title">{{mediationStatus === 'requested' ? '等待对方确认调解' : '调解已就绪'}}</text>
+      <text class="mediation-banner-id">会话: {{mediationSessionId}}</text>
+    </view>
+    <view class="mediation-banner-close" bindtap="clearMediation"><text>✕</text></view>
+  </view>
+
+  <!-- ══ 输入区域 ══ -->
+  <view class="input-area">
+    <view class="input-wrapper">
+      <view class="voice-btn {{recording ? 'recording' : ''}}" bindtouchstart="startRecord" bindtouchend="stopRecord">
+        <text>{{recording ? '🎙️' : '🎤'}}</text>
+      </view>
+      <input class="chat-input"
+        placeholder="{{recording ? '正在聆听...' : '和小爱说点什么...'}}"
+        value="{{inputText}}"
+        bindinput="onInput"
+        bindconfirm="sendMessage"
+        confirm-type="send"
+        adjust-position="{{true}}"
+      />
+      <view class="send-btn {{inputText ? 'active' : ''}}" bindtap="sendMessage">
+        <text>发送</text>
+      </view>
+    </view>
+  </view>
+
+  <!-- 悬浮音乐按钮 -->
+  <view class="floating-music-btn {{musicPlaying ? '' : 'off'}}" bindtap="toggleFloatingMusic">
+    <text class="music-btn-icon">{{musicPlaying ? '🎵' : '🔇'}}</text>
+  </view>
+</view>

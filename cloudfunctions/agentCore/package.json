@@ -1,0 +1,10 @@
+{
+  "name": "agentCore",
+  "version": "3.0.0",
+  "description": "AI Agent 核心云函数 - 完整功能版",
+  "main": "index.js",
+  "dependencies": {
+    "wx-server-sdk": "latest",
+    "node-fetch": "^2.7.0"
+  }
+}

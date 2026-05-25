@@ -1,0 +1,296 @@
+/* ── ♥ 粉色可爱主题 - 全局样式 ── */
+
+page {
+  --pink: #FF7BA6;
+  --pink-light: #FFB3CC;
+  --pink-pale: #FFF0F3;
+  --pink-dark: #E8668A;
+  --white: #FFFFFF;
+  --text: #4A3040;
+  --text-light: #9B8A93;
+  --shadow-sm: 0 2rpx 10rpx rgba(255, 123, 166, 0.08);
+  --shadow: 0 6rpx 24rpx rgba(255, 123, 166, 0.12), 0 2rpx 8rpx rgba(255, 123, 166, 0.06);
+  --shadow-lg: 0 12rpx 40rpx rgba(255, 123, 166, 0.18), 0 4rpx 16rpx rgba(255, 123, 166, 0.08);
+  --radius: 24rpx;
+  --radius-lg: 36rpx;
+
+  background-color: #FFF5F7;
+  color: var(--text);
+  font-family: -apple-system, BlinkMacSystemFont, 'PingFang SC', sans-serif;
+  font-size: 28rpx;
+  box-sizing: border-box;
+}
+
+/* ══ 页面入场动画 ══ */
+@keyframes pageFadeIn {
+  from { opacity: 0; transform: translateY(30rpx); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+@keyframes pageSlideUp {
+  from { opacity: 0; transform: translateY(80rpx); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+@keyframes cardPopIn {
+  from { opacity: 0; transform: scale(0.9); }
+  to   { opacity: 1; transform: scale(1); }
+}
+@keyframes heartbeat {
+  0%, 100% { transform: scale(1); }
+  15% { transform: scale(1.25); }
+  30% { transform: scale(1); }
+}
+@keyframes shimmer {
+  0%   { background-position: -400rpx 0; }
+  100% { background-position: 400rpx 0; }
+}
+@keyframes heartRain {
+  0%   { opacity: 1; transform: translateY(0) rotate(0deg) scale(1); }
+  100% { opacity: 0; transform: translateY(-600rpx) rotate(360deg) scale(0.3); }
+}
+@keyframes floatUpDown {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-10rpx); }
+}
+
+/* 应用到所有页面 */
+.page-enter {
+  animation: pageFadeIn 0.35s ease-out;
+}
+
+/* ══ 通用卡片 ══ */
+.card {
+  background: var(--white);
+  border-radius: var(--radius-lg);
+  padding: 32rpx;
+  margin: 24rpx;
+  box-shadow: var(--shadow);
+  transition: all 0.25s ease;
+}
+.card:active {
+  transform: scale(0.98);
+  box-shadow: var(--shadow-sm);
+}
+
+/* ══ 渐变按钮 ══ */
+.btn-pink {
+  background: linear-gradient(135deg, #FF7BA6, #FF9AB5);
+  color: #FFFFFF;
+  border: none;
+  border-radius: 48rpx;
+  padding: 22rpx 48rpx;
+  font-size: 30rpx;
+  font-weight: 600;
+  letter-spacing: 2rpx;
+  box-shadow: 0 8rpx 28rpx rgba(255, 123, 166, 0.4);
+  transition: all 0.2s ease;
+}
+.btn-pink:active {
+  transform: scale(0.94);
+  opacity: 0.9;
+  box-shadow: 0 4rpx 14rpx rgba(255, 123, 166, 0.3);
+}
+
+.btn-outline {
+  background: var(--white);
+  color: var(--pink);
+  border: 2rpx solid var(--pink-light);
+  border-radius: 48rpx;
+  padding: 22rpx 48rpx;
+  font-size: 28rpx;
+  font-weight: 500;
+}
+
+/* ══ 骨架屏 ══ */
+.skeleton {
+  background: linear-gradient(90deg, #FFE0EA 25%, #FFF5F7 50%, #FFE0EA 75%);
+  background-size: 800rpx 100%;
+  animation: shimmer 1.5s ease-in-out infinite;
+  border-radius: var(--radius);
+}
+.skeleton-line {
+  height: 24rpx;
+  margin-bottom: 16rpx;
+}
+.skeleton-line:last-child { width: 60%; }
+.skeleton-card {
+  height: 160rpx;
+  margin: 24rpx;
+  border-radius: var(--radius-lg);
+}
+.skeleton-avatar {
+  width: 100rpx; height: 100rpx;
+  border-radius: 50%;
+  display: inline-block;
+}
+.skeleton-title { height: 36rpx; width: 50%; margin: 20rpx 0; }
+.skeleton-stat { height: 80rpx; width: 80%; margin: 16rpx auto; border-radius: var(--radius); }
+
+/* ══ 微动效增强 ══ */
+@keyframes glowPulse {
+  0%, 100% { box-shadow: 0 0 0 0 rgba(255, 123, 166, 0.4); }
+  50% { box-shadow: 0 0 0 16rpx rgba(255, 123, 166, 0); }
+}
+@keyframes softBreathe {
+  0%, 100% { transform: scale(1); opacity: 1; }
+  50% { transform: scale(1.03); opacity: 0.9; }
+}
+@keyframes gentleFloat {
+  0%, 100% { transform: translateY(0); }
+  25% { transform: translateY(-6rpx); }
+  75% { transform: translateY(4rpx); }
+}
+@keyframes twinkle {
+  0%, 100% { opacity: 0.3; transform: scale(0.8); }
+  50% { opacity: 1; transform: scale(1.2); }
+}
+@keyframes slideInStaggered {
+  from { opacity: 0; transform: translateY(40rpx); }
+  to { opacity: 1; transform: translateY(0); }
+}
+@keyframes borderGlow {
+  0%, 100% { border-color: #FFE0EA; }
+  50% { border-color: #FFB3CC; }
+}
+
+/* 卡片入场（配合 delay 实现错落入场） */
+.card-stagger {
+  animation: slideInStaggered 0.5s ease-out both;
+}
+
+/* 呼吸光晕 - 用于高亮元素 */
+.glow-breathe {
+  animation: glowPulse 2.5s ease-in-out infinite;
+}
+
+/* 柔和呼吸 */
+.breathe {
+  animation: softBreathe 3s ease-in-out infinite;
+}
+
+/* 轻浮动 */
+.gentle-float {
+  animation: gentleFloat 4s ease-in-out infinite;
+}
+
+/* 闪烁小点 */
+.twinkle-dot {
+  animation: twinkle 2s ease-in-out infinite;
+}
+
+/* 边框呼吸 */
+.border-glow {
+  animation: borderGlow 2s ease-in-out infinite;
+}
+
+/* ══ 悬浮音乐按钮 ══ */
+.floating-music-btn {
+  position: fixed;
+  right: 32rpx;
+  bottom: 160rpx;
+  z-index: 100;
+  width: 80rpx; height: 80rpx;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #FF7BA6, #FFB3CC);
+  box-shadow: 0 6rpx 24rpx rgba(255, 123, 166, 0.45);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 32rpx;
+  transition: all 0.3s ease;
+  animation: softBreathe 3s ease-in-out infinite;
+}
+.floating-music-btn:active {
+  transform: scale(0.88);
+}
+.floating-music-btn.off {
+  background: #FFF;
+  border: 2rpx solid #FFE0EA;
+  box-shadow: var(--shadow);
+  animation: none;
+  opacity: 0.7;
+}
+.floating-music-btn.off .music-btn-icon {
+  filter: grayscale(0.3);
+}
+
+/* ══ 心形雨特效 ══ */
+.heart-particle {
+  position: fixed;
+  font-size: 40rpx;
+  pointer-events: none;
+  z-index: 9999;
+  animation: heartRain 2s ease-out forwards;
+}
+
+/* ══ 标题样式 ══ */
+.page-title {
+  font-size: 40rpx;
+  font-weight: 700;
+  color: var(--text);
+  margin: 16rpx 0;
+}
+.page-subtitle {
+  font-size: 26rpx;
+  color: var(--text-light);
+}
+
+/* ══ 输入框 ══ */
+.input-box {
+  background: #FFF5F7;
+  border: 2rpx solid #FFE0EA;
+  border-radius: var(--radius);
+  padding: 22rpx 28rpx;
+  font-size: 28rpx;
+  color: var(--text);
+  transition: border-color 0.2s;
+}
+.input-box:focus {
+  border-color: var(--pink);
+  box-shadow: 0 0 0 4rpx rgba(255, 123, 166, 0.1);
+}
+
+/* ══ 标签 ══ */
+.tag {
+  display: inline-block;
+  background: var(--pink-pale);
+  color: var(--pink-dark);
+  padding: 6rpx 20rpx;
+  border-radius: 32rpx;
+  font-size: 22rpx;
+  font-weight: 500;
+}
+
+/* ══ 分割线 ══ */
+.divider {
+  height: 1rpx;
+  background: #FFE0EA;
+  margin: 24rpx 0;
+}
+
+/* ══ 空状态 ══ */
+.empty-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 100rpx 0;
+  color: var(--text-light);
+}
+.empty-state .icon {
+  font-size: 100rpx;
+  margin-bottom: 24rpx;
+  opacity: 0.5;
+  animation: floatUpDown 3s ease-in-out infinite;
+}
+
+/* ══ Flex 工具 ══ */
+.flex-row { display: flex; flex-direction: row; align-items: center; }
+.flex-col { display: flex; flex-direction: column; }
+.flex-1 { flex: 1; }
+.flex-center { display: flex; align-items: center; justify-content: center; }
+.flex-between { display: flex; justify-content: space-between; align-items: center; }
+.text-center { text-align: center; }
+
+/* ══ 触感 button 重置 ══ */
+button { padding: 0; margin: 0; background: none; }
+button::after { border: none; }

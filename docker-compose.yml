@@ -1,0 +1,23 @@
+version: '3.8'
+
+services:
+  love-ai-server:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: love-ai-miniapp-server
+    ports:
+      - "3001:3001"
+    environment:
+      - NODE_ENV=production
+      - DEEPSEEK_KEY=${DEEPSEEK_KEY}
+      - PORT=3001
+    volumes:
+      - ./server/uploads:/app/uploads
+    restart: unless-stopped
+    networks:
+      - love-ai-network
+
+networks:
+  love-ai-network:
+    driver: bridge

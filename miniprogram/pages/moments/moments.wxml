@@ -1,0 +1,45 @@
+<!-- ♥ 心动瞬间 -->
+<view class="page">
+
+  <!-- 快速记录 -->
+  <view class="card quick-add">
+    <input class="input-box" placeholder="刚才发生了什么甜蜜的事？💕" value="{{newContent}}"
+      bindinput="onInput" bindconfirm="addMoment" confirm-type="done" />
+    <view class="quick-actions">
+      <view class="mood-quick {{newMood === '🥰' ? 'active' : ''}}" bindtap="pickMood" data-mood="🥰">🥰</view>
+      <view class="mood-quick {{newMood === '😂' ? 'active' : ''}}" bindtap="pickMood" data-mood="😂">😂</view>
+      <view class="mood-quick {{newMood === '🤗' ? 'active' : ''}}" bindtap="pickMood" data-mood="🤗">🤗</view>
+      <view class="mood-quick {{newMood === '😭' ? 'active' : ''}}" bindtap="pickMood" data-mood="😭">😭</view>
+      <view class="mood-quick {{newMood === '😡' ? 'active' : ''}}" bindtap="pickMood" data-mood="😡">😡</view>
+      <view class="btn-pink" style="padding:14rpx 32rpx;font-size:26rpx;" bindtap="addMoment">记下</view>
+    </view>
+  </view>
+
+  <!-- 瞬间列表 -->
+  <view class="moments-grid" wx:if="{{moments.length > 0}}">
+    <view class="moment-card {{item.mood === '😡' ? 'dark' : ''}}" wx:for="{{moments}}" wx:key="_id">
+      <view class="moment-header">
+        <text class="moment-mood">{{item.mood || '🥰'}}</text>
+        <text class="moment-date">{{item.date}}</text>
+        <view class="moment-delete" bindtap="deleteMoment" data-id="{{item._id}}">
+          <text>✕</text>
+        </view>
+      </view>
+      <text class="moment-content">{{item.content}}</text>
+      <view class="moment-tags" wx:if="{{item.tags && item.tags.length > 0}}">
+        <text class="tag" wx:for="{{item.tags}}" wx:for-item="tag" wx:key="*this">{{tag}}</text>
+      </view>
+    </view>
+  </view>
+
+  <view class="empty-state" wx:else>
+    <text class="icon">💝</text>
+    <text>还没有心动瞬间～</text>
+    <text style="color:var(--text-light);font-size:24rpx;margin-top:8rpx;">快速记下那些让你心动的片刻</text>
+  </view>
+
+  <!-- 生成心动集 -->
+  <view class="card flex-center" style="margin-top:24rpx;" wx:if="{{moments.length >= 5}}" bindtap="generateCollection">
+    <text style="color:var(--pink);font-size:28rpx;">📖 让小爱把这些瞬间串成心动集</text>
+  </view>
+</view>

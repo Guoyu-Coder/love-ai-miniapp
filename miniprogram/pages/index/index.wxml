@@ -1,0 +1,177 @@
+<!-- ♥ 首页仪表盘 -->
+<view class="page page-enter">
+
+  <!-- 骨架屏 -->
+  <block wx:if="{{loading}}">
+    <view class="hero-skeleton">
+      <view class="flex-center" style="gap:24rpx;">
+        <view class="skeleton skeleton-avatar"></view>
+        <text style="font-size:44rpx;">♥</text>
+        <view class="skeleton skeleton-avatar"></view>
+      </view>
+      <view class="skeleton skeleton-title" style="margin:24rpx auto;"></view>
+      <view class="skeleton skeleton-stat"></view>
+    </view>
+    <view class="skeleton skeleton-card" wx:for="{{[1,2]}}" wx:key="*this"></view>
+  </block>
+
+  <!-- 正式内容 -->
+  <block wx:else>
+    <!-- 情侣头部 -->
+    <view class="hero">
+      <view class="hero-avatars">
+        <image class="avatar" src="{{couple.avatar1 || '/images/default-avatar.png'}}" mode="aspectFill" bindtap="goProfile" />
+        <text class="heart-between">♥</text>
+        <image class="avatar" src="{{couple.avatar2 || '/images/default-avatar.png'}}" mode="aspectFill" bindtap="goProfile" />
+      </view>
+      <view class="hero-names">{{privacyMode ? '❤️ 我们 ❤️' : couple.name1 + ' & ' + couple.name2}}</view>
+      <view class="hero-days">
+        <text>在一起的第 </text>
+        <text class="days-num">{{daysTogether}}</text>
+        <text> 天 💕</text>
+      </view>
+
+      <!-- 纪念日倒计时 -->
+      <view class="countdown-badge" wx:if="{{daysLeft > 0}}" bindtap="shareAnniversary">
+        <text class="countdown-icon">🎯</text>
+        <text class="countdown-text">距 {{nextMilestone}} 天纪念日还有</text>
+        <text class="countdown-num">{{daysLeft}}</text>
+        <text class="countdown-text">天</text>
+      </view>
+    </view>
+
+    <!-- AI 每日灵感 -->
+    <view class="inspiration-card card" wx:if="{{inspiration}}" bindtap="refreshInspiration">
+      <view class="inspiration-header">
+        <text class="inspiration-icon">💡</text>
+        <text class="inspiration-title">今日约会灵感</text>
+        <text class="inspiration-refresh">换一个</text>
+      </view>
+      <text class="inspiration-content">{{inspiration}}</text>
+    </view>
+
+    <!-- 小爱主动提醒 -->
+    <view class="nudge-list" wx:if="{{nudges.length > 0}}">
+      <view class="nudge-item {{item.priority}}" wx:for="{{nudges}}" wx:key="type" bindtap="onNudgeTap" data-nudge="{{item}}">
+        <text class="nudge-icon">{{item.icon}}</text>
+        <text class="nudge-message">{{item.message}}</text>
+        <text class="nudge-dismiss" catchtap="dismissNudge" data-index="{{index}}">✕</text>
+      </view>
+    </view>
+
+    <!-- 快捷入口 -->
+    <view class="quick-actions">
+      <view class="action-card" bindtap="goChat">
+        <text class="action-icon">🤖</text>
+        <text class="action-label">和小爱聊天</text>
+        <text class="action-hint">AI 恋爱伴侣</text>
+      </view>
+      <view class="action-card" bindtap="goDateRecord">
+        <text class="action-icon">📸</text>
+        <text class="action-label">记录约会</text>
+        <text class="action-hint">保存美好回忆</text>
+      </view>
+      <view class="action-card" bindtap="goWish">
+        <text class="action-icon">✨</text>
+        <text class="action-label">添加愿望</text>
+        <text class="action-hint">一起实现</text>
+      </view>
+      <view class="action-card" bindtap="goMoment">
+        <text class="action-icon">💝</text>
+        <text class="action-label">心动瞬间</text>
+        <text class="action-hint">珍藏甜蜜</text>
+      </view>
+    </view>
+
+    <!-- 今日 AI 问候 -->
+    <view class="card greeting-card" wx:if="{{todayGreeting}}">
+      <view class="greeting-header">
+        <text class="greeting-icon">{{isMorning ? '☀️' : '🌙'}}</text>
+        <text class="greeting-title">小爱的{{isMorning ? '早安' : '晚安'}}</text>
+      </view>
+      <text class="greeting-content">{{todayGreeting}}</text>
+    </view>
+
+    <!-- 数据概览 -->
+    <view class="card stats-row">
+      <view class="stat-item" bindtap="goDates">
+        <text class="stat-num">{{stats.dateCount}}</text>
+        <text class="stat-label">次约会</text>
+      </view>
+      <view class="stat-divider"></view>
+      <view class="stat-item" bindtap="goWish">
+        <text class="stat-num">{{stats.wishPending}}</text>
+        <text class="stat-label">待实现</text>
+      </view>
+      <view class="stat-divider"></view>
+      <view class="stat-item" bindtap="goMoments">
+        <text class="stat-num">{{stats.momentCount}}</text>
+        <text class="stat-label">心动瞬间</text>
+      </view>
+      <view class="stat-divider"></view>
+      <view class="stat-item" bindtap="goPromises">
+        <text class="stat-num">{{stats.promiseCount}}</text>
+        <text class="stat-label">个约定</text>
+      </view>
+    </view>
+
+    <!-- 成就墙 -->
+    <view class="section-header" wx:if="{{achievements.length > 0}}" bindtap="goAchievements">
+      <text class="section-title">🏆 成就勋章</text>
+      <view class="ach-section-link">
+        <text class="ach-count">{{unlockedCount}}/{{totalAchievements}}</text>
+        <text class="section-more">查看殿堂 ›</text>
+      </view>
+    </view>
+    <scroll-view class="achievement-scroll" scroll-x wx:if="{{achievements.length > 0}}">
+      <view class="achievement-list">
+        <view class="ach-badge {{item.unlocked ? 'unlocked' : 'locked'}}" wx:for="{{achievements}}" wx:key="id">
+          <text class="ach-icon">{{item.unlocked ? item.icon : '🔒'}}</text>
+          <text class="ach-name">{{item.unlocked ? item.name : '???'}}</text>
+          <view class="ach-progress-mini" wx:if="{{!item.unlocked}}">
+            <view class="ach-progress-fill" style="width:{{item.progress / item.target * 100}}%"></view>
+          </view>
+          <text class="ach-desc">{{item.unlocked ? item.desc : item.target + '解锁'}}</text>
+        </view>
+      </view>
+    </scroll-view>
+
+    <!-- 最近约会 -->
+    <view class="section-header">
+      <text class="section-title">📅 最近约会</text>
+      <text class="section-more" bindtap="goDates">查看全部 ›</text>
+    </view>
+    <view class="recent-dates">
+      <view class="card date-mini" wx:for="{{recentDates}}" wx:key="_id" bindtap="goDateDetail" data-id="{{item._id}}">
+        <view class="date-mini-top">
+          <text class="date-mini-date">{{item.date}}</text>
+          <text class="date-mini-mood">{{item.mood || '甜蜜'}}</text>
+        </view>
+        <text class="date-mini-activity">{{item.activity}}</text>
+        <text class="date-mini-location" wx:if="{{item.location}}">📍 {{item.location}}</text>
+      </view>
+      <view class="empty-state" wx:if="{{recentDates.length === 0}}">
+        <text class="icon">📸</text>
+        <text>还没有约会记录，快去记录第一次吧！</text>
+      </view>
+    </view>
+  </block>
+
+  <view style="height: 48rpx;"></view>
+
+  <!-- 悬浮音乐按钮 -->
+  <view class="floating-music-btn {{musicPlaying ? '' : 'off'}}" bindtap="toggleFloatingMusic" wx:if="{{showMusicBtn}}">
+    <text class="music-btn-icon">{{musicPlaying ? '🎵' : '🔇'}}</text>
+  </view>
+
+  <!-- 心形粒子容器 -->
+  <view class="heart-particles" wx:if="{{hearts.length > 0}}">
+    <view
+      class="heart-particle"
+      wx:for="{{hearts}}"
+      wx:key="id"
+      style="left: {{item.x}}%; animation-delay: {{item.delay}}s; animation-duration: {{item.duration}}s; font-size: {{item.size}}rpx;">
+      {{item.emoji}}
+    </view>
+  </view>
+</view>

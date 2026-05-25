@@ -1,0 +1,44 @@
+<!-- ♥ 私密约定 -->
+<view class="page">
+
+  <view class="card form-card">
+    <text class="form-title">立下新约定 🤝</text>
+    <input class="input-box" placeholder="约定什么？" value="{{newTitle}}" bindinput="onTitleInput" />
+    <input class="input-box" style="margin-top:12rpx;" placeholder="具体内容（可选）" value="{{newContent}}" bindinput="onContentInput" />
+    <view class="form-row">
+      <view class="freq-picker">
+        <view class="freq-item {{newFreq === '每天' ? 'active' : ''}}" bindtap="pickFreq" data-freq="每天">每天</view>
+        <view class="freq-item {{newFreq === '每周' ? 'active' : ''}}" bindtap="pickFreq" data-freq="每周">每周</view>
+        <view class="freq-item {{newFreq === '每月' ? 'active' : ''}}" bindtap="pickFreq" data-freq="每月">每月</view>
+        <view class="freq-item {{newFreq === '随时' ? 'active' : ''}}" bindtap="pickFreq" data-freq="随时">随时</view>
+      </view>
+      <view class="btn-pink" style="padding:12rpx 32rpx;font-size:26rpx;" bindtap="addPromise">约定</view>
+    </view>
+  </view>
+
+  <view class="promises-list" wx:if="{{promises.length > 0}}">
+    <view class="card promise-item {{item.status === 'done' ? 'done' : ''}}" wx:for="{{promises}}" wx:key="_id">
+      <view class="promise-top">
+        <text class="promise-title">{{item.title}}</text>
+        <view class="promise-check" wx:if="{{item.status !== 'done'}}" bindtap="checkPromise" data-id="{{item._id}}">
+          <text class="check-circle">○</text>
+        </view>
+        <text wx:else style="font-size:28rpx;">✅</text>
+        <view class="promise-delete" bindtap="deletePromise" data-id="{{item._id}}">
+          <text>✕</text>
+        </view>
+      </view>
+      <text class="promise-content" wx:if="{{item.content}}">{{item.content}}</text>
+      <view class="promise-footer">
+        <text class="tag">{{item.frequency}}</text>
+        <text class="promise-streak" wx:if="{{item.streak > 0}}">已坚持 {{item.streak}} 次 🔥</text>
+      </view>
+    </view>
+  </view>
+
+  <view class="empty-state" wx:else>
+    <text class="icon">🤝</text>
+    <text>还没有约定～</text>
+    <text style="color:var(--text-light);font-size:24rpx;margin-top:8rpx;">"吵架不过夜"、"每周五看电影"...</text>
+  </view>
+</view>

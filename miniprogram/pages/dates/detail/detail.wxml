@@ -1,0 +1,112 @@
+<!-- ♥ 约会详情 / 新增 / AI 分析 -->
+<view class="page">
+
+  <!-- 查看模式 -->
+  <block wx:if="{{mode === 'view'}}">
+    <view class="detail-hero">
+      <text class="detail-date">{{record.date}}</text>
+      <text class="detail-mood">{{record.mood || '甜蜜'}}</text>
+    </view>
+
+    <view class="card">
+      <view class="detail-row">
+        <text class="detail-label">📍 地点</text>
+        <text class="detail-value">{{record.location || '未填写'}}</text>
+      </view>
+      <view class="detail-row">
+        <text class="detail-label">🎯 做了什么</text>
+        <text class="detail-value">{{record.activity}}</text>
+      </view>
+      <view class="detail-row" wx:if="{{record.notes}}">
+        <text class="detail-label">💭 心得</text>
+        <text class="detail-value notes">{{record.notes}}</text>
+      </view>
+    </view>
+
+    <!-- 照片 -->
+    <view class="photo-grid" wx:if="{{record.photos && record.photos.length > 0}}">
+      <image wx:for="{{record.photos}}" wx:key="*this" src="{{item}}" mode="aspectFill"
+        class="detail-photo" bindtap="previewPhoto" data-url="{{item}}" />
+    </view>
+
+    <!-- AI 分析 -->
+    <view class="card ai-analysis" wx:if="{{aiAnalysis}}">
+      <view class="ai-header">
+        <text>🤖 小爱的回忆小结</text>
+      </view>
+      <text class="ai-content">{{aiAnalysis}}</text>
+    </view>
+
+    <view class="card" wx:if="{{!aiAnalysis && !analyzing}}">
+      <view class="flex-center" style="padding:20rpx;" bindtap="getAIAnalysis">
+        <text style="color:var(--pink);font-size:28rpx;">✨ 让小爱帮我回忆这次约会</text>
+      </view>
+    </view>
+    <view class="card flex-center" wx:if="{{analyzing}}" style="padding:32rpx;">
+      <text style="color:var(--text-light);">小爱正在回忆中...</text>
+    </view>
+  </block>
+
+  <!-- 新增/编辑模式 -->
+  <block wx:if="{{mode === 'new'}}">
+    <view class="card form">
+      <view class="form-group">
+        <text class="form-label">📅 日期</text>
+        <picker mode="date" value="{{form.date}}" bindchange="onDateChange">
+          <view class="form-picker">{{form.date || '选择日期'}}</view>
+        </picker>
+      </view>
+
+      <view class="form-group">
+        <text class="form-label">📍 地点</text>
+        <view class="location-row">
+          <input class="input-box flex-1" placeholder="具体店名/地点" value="{{form.location}}" bindinput="onFieldChange" data-field="location" />
+          <view class="gps-btn" bindtap="chooseMapLocation">
+            <text class="gps-icon">🗺️</text>
+          </view>
+        </view>
+        <view class="location-detail" wx:if="{{form.locationAddress}}" bindtap="clearMapLocation">
+          <text class="loc-addr-icon">📍</text>
+          <text class="loc-addr-text">{{form.locationAddress}}</text>
+          <text class="loc-addr-clear">✕</text>
+        </view>
+      </view>
+
+      <view class="form-group">
+        <text class="form-label">🎯 做了什么</text>
+        <input class="input-box" placeholder="看电影、吃饭、散步..." value="{{form.activity}}" bindinput="onFieldChange" data-field="activity" />
+      </view>
+
+      <view class="form-group">
+        <text class="form-label">💕 心情</text>
+        <view class="mood-picker">
+          <view class="mood-item {{form.mood === '甜蜜' ? 'active' : ''}}" bindtap="pickMood" data-mood="甜蜜">甜蜜 🥰</view>
+          <view class="mood-item {{form.mood === '开心' ? 'active' : ''}}" bindtap="pickMood" data-mood="开心">开心 😆</view>
+          <view class="mood-item {{form.mood === '平淡' ? 'active' : ''}}" bindtap="pickMood" data-mood="平淡">平淡 😊</view>
+          <view class="mood-item {{form.mood === '感动' ? 'active' : ''}}" bindtap="pickMood" data-mood="感动">感动 🥺</view>
+          <view class="mood-item {{form.mood === '吵架' ? 'active' : ''}}" bindtap="pickMood" data-mood="吵架">吵架 😤</view>
+        </view>
+      </view>
+
+      <view class="form-group">
+        <text class="form-label">💭 心得（可选）</text>
+        <textarea class="input-box" style="height:160rpx;" placeholder="写下你的感受..."
+          value="{{form.notes}}" bindinput="onFieldChange" data-field="notes" />
+      </view>
+
+      <view class="form-group">
+        <text class="form-label">📷 照片（可选）</text>
+        <view class="photo-upload">
+          <image wx:for="{{form.photos}}" wx:key="*this" src="{{item}}" mode="aspectFill" class="upload-preview" />
+          <view class="upload-btn" bindtap="uploadPhoto" wx:if="{{form.photos.length < 9}}">
+            <text class="upload-plus">＋</text>
+          </view>
+        </view>
+      </view>
+
+      <button class="btn-pink" style="margin-top:24rpx;" bindtap="submitDate" disabled="{{submitting}}">
+        {{submitting ? '保存中...' : '💾 保存回忆'}}
+      </button>
+    </view>
+  </block>
+</view>

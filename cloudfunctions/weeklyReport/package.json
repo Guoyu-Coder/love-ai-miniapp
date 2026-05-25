@@ -1,0 +1,7 @@
+{
+  "name": "weeklyReport",
+  "version": "1.0.0",
+  "description": "AI 恋爱周报/月报自动生成",
+  "main": "index.js",
+  "dependencies": { "wx-server-sdk": "latest" }
+}

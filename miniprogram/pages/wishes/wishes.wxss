@@ -1,0 +1,30 @@
+/* ── 愿望清单样式 ── */
+.wish-form { margin-top: 16rpx; }
+.form-title { font-size: 28rpx; font-weight: 600; margin-bottom: 16rpx; display: block; }
+.form-actions { display: flex; justify-content: space-between; align-items: center; margin-top: 16rpx; }
+.cat-picker { display: flex; gap: 8rpx; }
+.cat-item {
+  padding: 8rpx 20rpx;
+  border-radius: 24rpx;
+  background: #FFF5F7;
+  font-size: 22rpx;
+  color: var(--text-light);
+}
+.cat-item.active { background: var(--pink-pale); color: var(--pink-dark); font-weight: 600; }
+.add-btn { padding: 14rpx 36rpx; font-size: 26rpx; }
+
+/* ── 愿望卡片 ── */
+.wish-item { margin-bottom: 16rpx; }
+.wish-item.done { opacity: 0.6; }
+.wish-top { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12rpx; }
+.wish-status { font-size: 24rpx; }
+.wish-toggle { font-size: 22rpx; color: var(--pink); padding: 6rpx 16rpx; border: 1rpx solid var(--pink-light); border-radius: 24rpx; }
+.wish-title { font-size: 30rpx; font-weight: 700; display: block; margin-bottom: 4rpx; }
+.wish-desc { font-size: 24rpx; color: var(--text-light); display: block; }
+
+.wish-ai { background: #FFF0F3; padding: 16rpx; border-radius: 16rpx; margin-top: 12rpx; }
+.ai-tip-text { font-size: 24rpx; color: var(--pink-dark); line-height: 1.5; }
+.wish-ask-ai { margin-top: 12rpx; text-align: right; }
+.wish-ask-ai text { color: var(--pink); font-size: 24rpx; }
+.wish-delete { width: 44rpx; height: 44rpx; display: flex; align-items: center; justify-content: center; font-size: 24rpx; color: #CCC; margin-left: 8rpx; }
+.wish-delete:active { color: #E8668A; }

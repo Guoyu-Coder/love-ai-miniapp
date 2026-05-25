@@ -1,0 +1,302 @@
+/* ── 首页样式 ── */
+
+.hero {
+  background: linear-gradient(180deg, #FF7BA6 0%, #FFB3CC 55%, #FFF0F3 100%);
+  padding: 48rpx 32rpx 32rpx;
+  text-align: center;
+  border-radius: 0 0 60rpx 60rpx;
+}
+.hero-skeleton {
+  background: linear-gradient(180deg, #FFB3CC, #FFF0F3);
+  padding: 80rpx 32rpx 60rpx;
+  text-align: center;
+  border-radius: 0 0 60rpx 60rpx;
+}
+
+.hero-avatars {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 20rpx;
+}
+.avatar {
+  width: 100rpx; height: 100rpx;
+  border-radius: 50%;
+  border: 4rpx solid rgba(255,255,255,0.8);
+  background: #FFE0EA;
+}
+.heart-between {
+  font-size: 44rpx;
+  margin: 0 20rpx;
+  animation: heartbeat 1.5s ease-in-out infinite;
+}
+
+.hero-names {
+  font-size: 36rpx;
+  font-weight: 700;
+  color: #FFFFFF;
+  text-shadow: 0 2rpx 8rpx rgba(255,123,166,0.3);
+}
+.hero-days {
+  margin-top: 10rpx;
+  font-size: 26rpx;
+  color: rgba(255,255,255,0.9);
+}
+.days-num {
+  font-size: 40rpx;
+  font-weight: 800;
+  color: #FFFFFF;
+  margin: 0 6rpx;
+}
+
+/* ── 纪念日倒计时 ── */
+.countdown-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 8rpx;
+  background: rgba(255,255,255,0.3);
+  backdrop-filter: blur(10rpx);
+  border-radius: 40rpx;
+  padding: 12rpx 28rpx;
+  margin-top: 16rpx;
+}
+.countdown-icon { font-size: 28rpx; }
+.countdown-text { font-size: 22rpx; color: #FFFFFF; }
+.countdown-num {
+  font-size: 32rpx;
+  font-weight: 800;
+  color: #FFFFFF;
+  background: rgba(255,255,255,0.25);
+  padding: 2rpx 14rpx;
+  border-radius: 20rpx;
+}
+
+/* ── 小爱主动提醒 ── */
+.nudge-list {
+  padding: 0 24rpx;
+  display: flex;
+  flex-direction: column;
+  gap: 12rpx;
+}
+.nudge-item {
+  display: flex;
+  align-items: center;
+  gap: 12rpx;
+  padding: 16rpx 20rpx;
+  border-radius: 16rpx;
+  background: #FFFFFF;
+  border: 2rpx solid #FFE0EA;
+  transition: all 0.2s;
+}
+.nudge-item:active {
+  transform: scale(0.98);
+  border-color: var(--pink-light);
+}
+.nudge-item.high {
+  border-color: #FFB3CC;
+  background: linear-gradient(135deg, #FFF5F7, #FFFFFF);
+}
+.nudge-item.medium {
+  border-color: #FFE0EA;
+}
+.nudge-item.low {
+  border-color: #F0F0F0;
+  opacity: 0.85;
+}
+.nudge-icon {
+  font-size: 32rpx;
+  flex-shrink: 0;
+}
+.nudge-message {
+  flex: 1;
+  font-size: 24rpx;
+  color: var(--text);
+  line-height: 1.5;
+}
+.nudge-dismiss {
+  width: 36rpx;
+  height: 36rpx;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 20rpx;
+  color: #CCC;
+  flex-shrink: 0;
+}
+.nudge-dismiss:active {
+  background: #FFE0EA;
+  color: #E8668A;
+}
+
+/* ── AI 灵感卡片 ── */
+.inspiration-card {
+  margin: -10rpx 24rpx 20rpx;
+  background: linear-gradient(135deg, #FFF0F3, #FFFFFF);
+  border: 2rpx solid #FFE0EA;
+  animation: cardPopIn 0.4s ease-out;
+}
+.inspiration-header {
+  display: flex;
+  align-items: center;
+  margin-bottom: 12rpx;
+}
+.inspiration-icon { font-size: 32rpx; margin-right: 10rpx; }
+.inspiration-title { font-size: 26rpx; font-weight: 600; flex: 1; color: var(--pink-dark); }
+.inspiration-refresh { font-size: 22rpx; color: var(--pink); padding: 4rpx 16rpx; border: 1rpx solid var(--pink-light); border-radius: 20rpx; }
+.inspiration-content { font-size: 28rpx; line-height: 1.7; color: var(--text); display: block; }
+
+/* ── 快捷入口 ── */
+.quick-actions {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16rpx;
+  padding: 24rpx;
+}
+.action-card {
+  background: #FFFFFF;
+  border-radius: var(--radius-lg);
+  padding: 28rpx;
+  text-align: center;
+  box-shadow: var(--shadow);
+  transition: all 0.2s ease;
+}
+.action-card:active {
+  transform: scale(0.94);
+  box-shadow: var(--shadow-sm);
+}
+.action-icon {
+  font-size: 48rpx;
+  display: block;
+  margin-bottom: 10rpx;
+  animation: floatUpDown 3s ease-in-out infinite;
+}
+.action-label {
+  font-size: 28rpx;
+  font-weight: 600;
+  color: var(--text);
+  display: block;
+}
+.action-hint {
+  font-size: 22rpx;
+  color: var(--text-light);
+  margin-top: 4rpx;
+  display: block;
+}
+
+/* ── 问候卡片 ── */
+.greeting-card {
+  margin: 0 24rpx 24rpx;
+  background: linear-gradient(135deg, #FFF0F3, #FFE0EA);
+  border-left: 6rpx solid var(--pink);
+}
+.greeting-header {
+  display: flex;
+  align-items: center;
+  margin-bottom: 16rpx;
+}
+.greeting-icon { font-size: 36rpx; margin-right: 12rpx; }
+.greeting-title { font-size: 28rpx; font-weight: 600; color: var(--pink-dark); }
+.greeting-content { font-size: 28rpx; line-height: 1.7; color: var(--text); }
+
+/* ── 数据统计 ── */
+.stats-row {
+  display: flex;
+  justify-content: space-around;
+  margin: 0 24rpx 24rpx;
+  padding: 28rpx 16rpx;
+}
+.stat-item { text-align: center; }
+.stat-item:active { transform: scale(0.9); }
+.stat-num {
+  font-size: 44rpx;
+  font-weight: 800;
+  color: var(--pink);
+  display: block;
+}
+.stat-label {
+  font-size: 22rpx;
+  color: var(--text-light);
+  margin-top: 6rpx;
+  display: block;
+}
+.stat-divider {
+  width: 2rpx;
+  background: #FFE0EA;
+  align-self: stretch;
+}
+
+/* ── 区块标题 ── */
+.section-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0 24rpx;
+  margin-bottom: 8rpx;
+}
+.section-title { font-size: 30rpx; font-weight: 600; }
+.section-more { font-size: 22rpx; color: var(--pink-light); }
+.ach-section-link { display: flex; align-items: center; gap: 8rpx; }
+.ach-count { font-size: 24rpx; color: var(--pink-dark); font-weight: 600; }
+
+/* ── 成就墙 ── */
+.achievement-scroll {
+  white-space: nowrap;
+  padding: 0 24rpx;
+  margin-bottom: 16rpx;
+}
+.achievement-list {
+  display: inline-flex;
+  gap: 16rpx;
+  padding-bottom: 8rpx;
+}
+.ach-badge {
+  display: inline-flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6rpx;
+  width: 150rpx;
+  padding: 20rpx 12rpx 16rpx;
+  border-radius: var(--radius-lg);
+  background: #FFFFFF;
+  box-shadow: var(--shadow);
+  text-align: center;
+  white-space: normal;
+}
+.ach-badge.unlocked {
+  background: linear-gradient(135deg, #FFF5E6, #FFFFFF);
+  border: 2rpx solid #FFD700;
+}
+.ach-badge.locked {
+  opacity: 0.55;
+  filter: grayscale(0.5);
+}
+.ach-icon { font-size: 40rpx; display: block; }
+.ach-name { font-size: 22rpx; font-weight: 600; color: var(--text); display: block; }
+.ach-desc {
+  font-size: 18rpx;
+  color: var(--text-light);
+  display: block;
+  line-height: 1.3;
+}
+.ach-progress-mini {
+  width: 100%;
+  height: 6rpx;
+  background: #EEE;
+  border-radius: 3rpx;
+  overflow: hidden;
+}
+.ach-progress-fill {
+  height: 100%;
+  background: linear-gradient(90deg, #FFD700, #FFA500);
+  border-radius: 3rpx;
+}
+
+/* ── 约会小卡 ── */
+.recent-dates { padding: 0 24rpx; }
+.date-mini { margin: 0 0 16rpx; }
+.date-mini-top { display: flex; justify-content: space-between; margin-bottom: 10rpx; }
+.date-mini-date { font-size: 24rpx; color: var(--text-light); }
+.date-mini-mood { font-size: 24rpx; }
+.date-mini-activity { font-size: 30rpx; font-weight: 600; display: block; }
+.date-mini-location { font-size: 24rpx; color: var(--text-light); margin-top: 6rpx; display: block; }

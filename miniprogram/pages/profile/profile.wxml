@@ -1,0 +1,88 @@
+<!-- ♥ 情侣档案 -->
+<view class="page page-enter">
+  <!-- 顶部渐变背景 -->
+  <view class="profile-hero">
+    <view class="hero-glow"></view>
+    <view class="profile-avatars">
+      <view class="profile-avatar-box" bindtap="chooseAvatar" data-role="avatar1">
+        <image src="{{couple.avatar1 || '/images/default-avatar.png'}}" mode="aspectFill" class="profile-avatar" />
+        <view class="avatar-edit-badge">📷</view>
+      </view>
+      <view class="heart-pulse">♥</view>
+      <view class="profile-avatar-box" bindtap="chooseAvatar" data-role="avatar2">
+        <image src="{{couple.avatar2 || '/images/default-avatar.png'}}" mode="aspectFill" class="profile-avatar" />
+        <view class="avatar-edit-badge">📷</view>
+      </view>
+    </view>
+
+    <view class="hero-stats">
+      <view class="hero-stat-item">
+        <text class="hero-stat-num">{{daysTogether}}</text>
+        <text class="hero-stat-label">天在一起</text>
+      </view>
+      <view class="hero-stat-divider"></view>
+      <view class="hero-stat-item">
+        <text class="hero-stat-num">{{nextMilestoneDays || '-'}}</text>
+        <text class="hero-stat-label">天后{{nextMilestone || '纪念日'}}</text>
+      </view>
+    </view>
+  </view>
+
+  <!-- 编辑卡片 -->
+  <view class="card" style="margin-top: -40rpx; position: relative; z-index: 2;">
+    <text class="card-title">📝 编辑档案</text>
+
+    <view class="form-group">
+      <text class="form-label">你们的昵称</text>
+      <view class="double-input">
+        <input class="input-box" value="{{couple.name1}}" bindinput="onField" data-field="name1" placeholder="你的昵称" />
+        <text class="input-and">和</text>
+        <input class="input-box" value="{{couple.name2}}" bindinput="onField" data-field="name2" placeholder="TA的昵称" />
+      </view>
+    </view>
+
+    <view class="form-group">
+      <text class="form-label">💕 在一起的第一天</text>
+      <picker mode="date" value="{{couple.startDate}}" bindchange="onStartDate">
+        <view class="form-picker">{{couple.startDate || '点击选择日期'}}</view>
+      </picker>
+    </view>
+
+    <view class="form-group">
+      <text class="form-label">📍 你们的城市</text>
+      <view class="location-row">
+        <picker mode="region" value="{{region}}" bindchange="onRegionChange" level="city">
+          <view class="form-picker location-picker">
+            {{couple.city || '点击选择省/市/区'}}
+          </view>
+        </picker>
+        <view class="gps-btn" bindtap="detectLocation" wx:if="{{!locating}}">
+          <text class="gps-icon">📍</text>
+        </view>
+        <view class="gps-btn loading" wx:if="{{locating}}">
+          <text class="gps-dot">...</text>
+        </view>
+      </view>
+      <text class="form-tip" wx:if="{{locationDetail}}" style="margin-top:8rpx;">{{locationDetail}}</text>
+    </view>
+  </view>
+
+  <!-- 纪念日预览 -->
+  <view class="card" wx:if="{{anniversaries.length > 0}}">
+    <text class="card-title">📅 纪念日</text>
+    <view class="anni-item" wx:for="{{anniversaries}}" wx:key="index">
+      <view class="anni-left">
+        <text class="anni-icon">{{item.icon || '💕'}}</text>
+        <text class="anni-label">{{item.label}}</text>
+      </view>
+      <text class="anni-date-right">{{item.date}}</text>
+    </view>
+  </view>
+
+  <!-- 保存 -->
+  <button class="btn-pink" style="margin: 32rpx 24rpx;" bindtap="saveProfile">
+    💾 保存档案
+  </button>
+
+  <view style="height: 48rpx;"></view>
+</view>

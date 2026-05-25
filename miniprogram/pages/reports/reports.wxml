@@ -1,0 +1,51 @@
+<!-- ♥ 恋爱周报/月报 -->
+<view class="page">
+
+  <!-- 生成新报告 -->
+  <view class="card report-actions">
+    <text class="section-title">生成新报告</text>
+    <view class="report-btns">
+      <view class="report-btn {{genType === 'week' ? 'active' : ''}}" bindtap="pickType" data-type="week">
+        <text class="btn-icon">📅</text>
+        <text>本周</text>
+      </view>
+      <view class="report-btn {{genType === 'month' ? 'active' : ''}}" bindtap="pickType" data-type="month">
+        <text class="btn-icon">📆</text>
+        <text>本月</text>
+      </view>
+      <view class="report-btn {{genType === 'year' ? 'active' : ''}}" bindtap="pickType" data-type="year">
+        <text class="btn-icon">🎊</text>
+        <text>年度</text>
+      </view>
+    </view>
+    <button class="btn-pink" style="margin-top:24rpx;" bindtap="generateReport" loading="{{generating}}">
+      {{generating ? '小爱创作中...' : '🤖 生成报告'}}
+    </button>
+  </view>
+
+  <!-- 历史报告 -->
+  <view class="section-header">
+    <text class="section-title">📚 历史报告</text>
+  </view>
+
+  <block wx:for="{{reports}}" wx:key="_id">
+    <view class="card report-card" bindtap="openReport" data-id="{{item._id}}">
+      <view class="report-card-top">
+        <text class="report-type">{{item.type === 'week' ? '📅 周报' : item.type === 'month' ? '📆 月报' : '🎊 年报'}}</text>
+        <text class="report-date">{{item.startDate}} ~ {{item.endDate}}</text>
+      </view>
+      <view class="report-stats" wx:if="{{item.stats}}">
+        <text class="report-stat">约会 {{item.stats.dateCount || 0}} 次</text>
+        <text class="report-stat">瞬间 {{item.stats.momentCount || 0}} 条</text>
+        <text class="report-stat">约定 {{item.stats.promiseCount || 0}} 项</text>
+      </view>
+      <text class="report-preview">{{item.preview || '点击查看完整报告...'}}</text>
+    </view>
+  </block>
+
+  <view class="empty-state" wx:if="{{reports.length === 0}}">
+    <text class="icon">📊</text>
+    <text>还没有报告～</text>
+    <text style="color:var(--text-light);font-size:24rpx;margin-top:8rpx;">生成第一份恋爱周报吧</text>
+  </view>
+</view>

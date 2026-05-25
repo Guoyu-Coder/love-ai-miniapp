@@ -1,0 +1,298 @@
+<!-- ♥ 设置页 v2.3 - 折叠面板 -->
+<view class="page page-enter">
+  <view class="settings-header">
+    <text class="settings-header-title">⚙️ 设置</text>
+    <text class="settings-header-sub">管理你的空间与偏好</text>
+  </view>
+
+  <!-- ══ 情侣档案入口 ══ -->
+  <view class="card profile-entry" bindtap="goProfile">
+    <view class="profile-entry-row">
+      <image class="pe-avatar" src="{{couple.avatar1 || '/images/default-avatar.png'}}" mode="aspectFill" />
+      <text class="pe-heart">♥</text>
+      <image class="pe-avatar" src="{{couple.avatar2 || '/images/default-avatar.png'}}" mode="aspectFill" />
+      <view class="pe-info">
+        <text class="pe-names">{{couple.name1}} & {{couple.name2}}</text>
+        <text class="pe-meta">{{couple.startDate || '设置纪念日'}} · {{couple.city || '设置城市'}}</text>
+      </view>
+      <text class="pe-arrow">›</text>
+    </view>
+  </view>
+
+  <!-- ══ 1. 关系绑定 ══ -->
+  <view class="panel-card">
+    <view class="panel-header" bindtap="togglePanel" data-key="binding">
+      <view class="panel-header-left">
+        <text class="panel-icon">🔗</text>
+        <view class="panel-header-text">
+          <text class="panel-title">关系绑定</text>
+          <text class="panel-summary">{{bindingSummary}}</text>
+        </view>
+      </view>
+      <text class="panel-chevron {{panels.binding ? 'open' : ''}}">▾</text>
+    </view>
+    <view class="panel-body {{panels.binding ? 'open' : ''}}">
+      <block wx:if="{{!binding || binding.status !== 'active'}}">
+        <view class="bind-status">
+          <text class="bind-status-icon">🔓</text>
+          <text class="bind-status-text">尚未绑定</text>
+        </view>
+        <text class="form-tip">生成邀请码，让TA在另一台手机上输入确认，完成双向绑定</text>
+        <view class="bind-actions">
+          <view class="btn-outline-sm" bindtap="generateInviteCode"><text>📨 生成邀请码</text></view>
+          <view class="btn-outline-sm" bindtap="inputInviteCode"><text>🔑 输入邀请码</text></view>
+        </view>
+        <view class="invite-code-display" wx:if="{{inviteCode}}">
+          <text class="invite-code-label">你的邀请码（24小时内有效）</text>
+          <text class="invite-code-value">{{inviteCode}}</text>
+        </view>
+      </block>
+      <block wx:if="{{binding && binding.status === 'active'}}">
+        <view class="bind-status bound">
+          <text class="bind-status-icon">🔒</text>
+          <text class="bind-status-text">已绑定 · {{binding.partnerNick || 'TA'}}</text>
+          <text class="bind-time">{{binding.boundAtText}}</text>
+        </view>
+        <view class="bind-actions">
+          <view class="btn-outline-sm danger" bindtap="requestUnbind"><text>断开绑定</text></view>
+        </view>
+        <text class="form-tip" wx:if="{{binding.unbindStatus === 'pending'}}">⚠️ 解绑请求已提交，对方有24小时反悔期</text>
+      </block>
+    </view>
+  </view>
+
+  <!-- ══ 2. AI 称呼 ══ -->
+  <view class="panel-card">
+    <view class="panel-header" bindtap="togglePanel" data-key="nicknames">
+      <view class="panel-header-left">
+        <text class="panel-icon">💬</text>
+        <view class="panel-header-text">
+          <text class="panel-title">AI 称呼</text>
+          <text class="panel-summary">{{nickSummary}}</text>
+        </view>
+      </view>
+      <text class="panel-chevron {{panels.nicknames ? 'open' : ''}}">▾</text>
+    </view>
+    <view class="panel-body {{panels.nicknames ? 'open' : ''}}">
+      <text class="form-tip">聊天时小爱会用这些称呼叫你们</text>
+      <view class="form-group">
+        <text class="form-label">{{couple.name1}} 被叫</text>
+        <view class="nickname-tags">
+          <view class="nick-tag {{nick1 === '宝贝' ? 'active' : ''}}" bindtap="pickNick" data-who="1" data-name="宝贝">宝贝</view>
+          <view class="nick-tag {{nick1 === '亲爱的' ? 'active' : ''}}" bindtap="pickNick" data-who="1" data-name="亲爱的">亲爱的</view>
+          <view class="nick-tag {{nick1 === '老婆' ? 'active' : ''}}" bindtap="pickNick" data-who="1" data-name="老婆">老婆</view>
+          <input class="nick-input" placeholder="自定义" value="{{nick1Custom}}" bindinput="onNickCustom" data-who="1" />
+        </view>
+      </view>
+      <view class="form-group">
+        <text class="form-label">{{couple.name2}} 被叫</text>
+        <view class="nickname-tags">
+          <view class="nick-tag {{nick2 === '宝贝' ? 'active' : ''}}" bindtap="pickNick" data-who="2" data-name="宝贝">宝贝</view>
+          <view class="nick-tag {{nick2 === '亲爱的' ? 'active' : ''}}" bindtap="pickNick" data-who="2" data-name="亲爱的">亲爱的</view>
+          <view class="nick-tag {{nick2 === '老公' ? 'active' : ''}}" bindtap="pickNick" data-who="2" data-name="老公">老公</view>
+          <input class="nick-input" placeholder="自定义" value="{{nick2Custom}}" bindinput="onNickCustom" data-who="2" />
+        </view>
+      </view>
+    </view>
+  </view>
+
+  <!-- ══ 3. 纪念日 ══ -->
+  <view class="panel-card">
+    <view class="panel-header" bindtap="togglePanel" data-key="anniversaries">
+      <view class="panel-header-left">
+        <text class="panel-icon">📅</text>
+        <view class="panel-header-text">
+          <text class="panel-title">纪念日</text>
+          <text class="panel-summary">{{anniSummary}}</text>
+        </view>
+      </view>
+      <text class="panel-chevron {{panels.anniversaries ? 'open' : ''}}">▾</text>
+    </view>
+    <view class="panel-body {{panels.anniversaries ? 'open' : ''}}">
+      <view class="anni-item" wx:for="{{anniversaries}}" wx:key="index">
+        <view class="anni-left">
+          <text class="anni-icon">{{item.icon || '💕'}}</text>
+          <view>
+            <text class="anni-label">{{item.label}}</text>
+            <text class="anni-date">{{item.date}}</text>
+          </view>
+        </view>
+        <view class="anni-delete" bindtap="removeAnniversary" data-index="{{index}}"><text>✕</text></view>
+      </view>
+      <view class="empty-mini" wx:if="{{anniversaries.length === 0}}">
+        <text>还没有纪念日</text>
+      </view>
+      <view class="add-anni-btn" bindtap="addAnniversary"><text>＋ 添加纪念日</text></view>
+    </view>
+  </view>
+
+  <!-- ══ 4. 通知偏好 ══ -->
+  <view class="panel-card">
+    <view class="panel-header" bindtap="togglePanel" data-key="notify">
+      <view class="panel-header-left">
+        <text class="panel-icon">🔔</text>
+        <view class="panel-header-text">
+          <text class="panel-title">通知偏好</text>
+          <text class="panel-summary">{{notifySummary}}</text>
+        </view>
+      </view>
+      <text class="panel-chevron {{panels.notify ? 'open' : ''}}">▾</text>
+    </view>
+    <view class="panel-body {{panels.notify ? 'open' : ''}}">
+      <view class="toggle-row" bindtap="toggleGreeting">
+        <view><text class="toggle-label">🌅 AI 每日问候</text><text class="toggle-hint">每天最多1条 · {{notifyGreeting ? '已开启' : '已关闭'}}</text></view>
+        <switch checked="{{notifyGreeting}}" color="#FF7BA6" />
+      </view>
+      <view class="toggle-row" bindtap="toggleReport">
+        <view><text class="toggle-label">📊 每周恋爱报告</text><text class="toggle-hint">每周日自动生成 · {{notifyReport ? '已开启' : '已关闭'}}</text></view>
+        <switch checked="{{notifyReport}}" color="#FF7BA6" />
+      </view>
+      <view class="toggle-row" bindtap="togglePartnerActivity">
+        <view><text class="toggle-label">💌 对方动态提醒</text><text class="toggle-hint">TA新增约会/愿望时通知你 · {{notifyPartner ? '已开启' : '已关闭'}}</text></view>
+        <switch checked="{{notifyPartner}}" color="#FF7BA6" />
+      </view>
+      <view class="toggle-row" bindtap="toggleAnniversaryNotify">
+        <view><text class="toggle-label">🎯 纪念日提醒</text><text class="toggle-hint">纪念日前3天提醒 · {{notifyAnniversary ? '已开启' : '已关闭'}}</text></view>
+        <switch checked="{{notifyAnniversary}}" color="#FF7BA6" />
+      </view>
+      <view class="cooldown-info" wx:if="{{inCooldown}}">
+        <text class="cooldown-icon">💤</text>
+        <text class="cooldown-text">检测到最近不活跃，通知频率已自动降低。重新活跃后恢复正常。</text>
+      </view>
+    </view>
+  </view>
+
+  <!-- ══ 5. 背景音乐 ══ -->
+  <view class="panel-card">
+    <view class="panel-header" bindtap="togglePanel" data-key="music">
+      <view class="panel-header-left">
+        <text class="panel-icon">🎵</text>
+        <view class="panel-header-text">
+          <text class="panel-title">背景音乐</text>
+          <text class="panel-summary">{{musicSummary}}</text>
+        </view>
+      </view>
+      <text class="panel-chevron {{panels.music ? 'open' : ''}}">▾</text>
+    </view>
+    <view class="panel-body {{panels.music ? 'open' : ''}}">
+      <view class="toggle-row" bindtap="toggleMusic">
+        <view><text class="toggle-label">🎼 开启背景音乐</text><text class="toggle-hint">{{musicEnabled ? '正在播放: ' + musicTrackName : '点击开启暖心氛围'}}</text></view>
+        <switch checked="{{musicEnabled}}" color="#FF7BA6" />
+      </view>
+      <view class="music-controls" wx:if="{{musicEnabled}}">
+        <view class="music-btn-row">
+          <view class="music-btn" bindtap="musicPrev"><text>⏮</text></view>
+          <view class="music-btn play-btn" bindtap="musicTogglePlay"><text>{{musicPlaying ? '⏸' : '▶️'}}</text></view>
+          <view class="music-btn" bindtap="musicNext"><text>⏭</text></view>
+        </view>
+        <view class="music-track-list">
+          <view class="music-track {{musicCurrentTrack === index ? 'active' : ''}}" wx:for="{{musicPlaylist}}" wx:key="id" bindtap="musicSelectTrack" data-index="{{index}}">
+            <text class="music-track-icon">{{item.icon}}</text>
+            <text class="music-track-name">{{item.name}}</text>
+            <text class="music-track-playing" wx:if="{{musicCurrentTrack === index}}">{{musicPlaying ? '♪' : '❚❚'}}</text>
+          </view>
+        </view>
+      </view>
+    </view>
+  </view>
+
+  <!-- ══ 6. 隐私保护 ══ -->
+  <view class="panel-card">
+    <view class="panel-header" bindtap="togglePanel" data-key="privacy">
+      <view class="panel-header-left">
+        <text class="panel-icon">🔒</text>
+        <view class="panel-header-text">
+          <text class="panel-title">隐私保护</text>
+          <text class="panel-summary">{{privacySummary}}</text>
+        </view>
+      </view>
+      <text class="panel-chevron {{panels.privacy ? 'open' : ''}}">▾</text>
+    </view>
+    <view class="panel-body {{panels.privacy ? 'open' : ''}}">
+      <view class="toggle-row" bindtap="togglePrivacy">
+        <view><text class="toggle-label">👁️ 首页信息隐藏</text><text class="toggle-hint">用「❤️ 我们」代替真实姓名头像 · {{privacyMode ? '已开启' : '已关闭'}}</text></view>
+        <switch checked="{{privacyMode}}" color="#FF7BA6" />
+      </view>
+      <view class="toggle-row" bindtap="toggleScreenshotWarning">
+        <view><text class="toggle-label">📵 截屏提醒</text><text class="toggle-hint">检测到截屏时弹窗提醒 · {{screenshotWarning ? '已开启' : '已关闭'}}</text></view>
+        <switch checked="{{screenshotWarning}}" color="#FF7BA6" />
+      </view>
+      <view class="toggle-row" bindtap="togglePreviewMask">
+        <view><text class="toggle-label">🫣 内容预览打码</text><text class="toggle-hint">列表页不显示具体内容 · {{previewMask ? '已开启' : '已关闭'}}</text></view>
+        <switch checked="{{previewMask}}" color="#FF7BA6" />
+      </view>
+      <view class="toggle-row" bindtap="toggleShareMask">
+        <view><text class="toggle-label">📤 分享卡片打码</text><text class="toggle-hint">分享时自动隐藏敏感信息 · {{shareMask ? '已开启' : '已关闭'}}</text></view>
+        <switch checked="{{shareMask}}" color="#FF7BA6" />
+      </view>
+    </view>
+  </view>
+
+  <!-- ══ 7. 回收站 ══ -->
+  <view class="panel-card">
+    <view class="panel-header" bindtap="togglePanel" data-key="trash">
+      <view class="panel-header-left">
+        <text class="panel-icon">🗑️</text>
+        <view class="panel-header-text">
+          <text class="panel-title">回收站</text>
+          <text class="panel-summary">{{trashSummary}}</text>
+        </view>
+      </view>
+      <text class="panel-chevron {{panels.trash ? 'open' : ''}}">▾</text>
+    </view>
+    <view class="panel-body {{panels.trash ? 'open' : ''}}">
+      <text class="form-tip">删除的记录会在这里保留30天，可随时恢复</text>
+      <view class="trash-summary">
+        <view class="trash-stat">
+          <text class="trash-num">{{trashCount}}</text>
+          <text class="trash-label">条待清理</text>
+        </view>
+        <view class="trash-stat">
+          <text class="trash-num">30</text>
+          <text class="trash-label">天保留期</text>
+        </view>
+      </view>
+      <view class="bind-actions">
+        <view class="btn-outline-sm" bindtap="viewTrash"><text>📋 查看回收站</text></view>
+        <view class="btn-outline-sm danger" bindtap="emptyTrash" wx:if="{{trashCount > 0}}"><text>清空回收站</text></view>
+      </view>
+    </view>
+  </view>
+
+  <!-- ══ 8. 存储管理 ══ -->
+  <view class="panel-card">
+    <view class="panel-header" bindtap="togglePanel" data-key="storage">
+      <view class="panel-header-left">
+        <text class="panel-icon">🧹</text>
+        <view class="panel-header-text">
+          <text class="panel-title">存储管理</text>
+          <text class="panel-summary">已用 {{storageUsed}}</text>
+        </view>
+      </view>
+      <text class="panel-chevron {{panels.storage ? 'open' : ''}}">▾</text>
+    </view>
+    <view class="panel-body {{panels.storage ? 'open' : ''}}">
+      <view class="storage-bar">
+        <view class="storage-fill" style="width:{{storagePercent}}%;"></view>
+      </view>
+      <text class="storage-text">已使用 {{storageUsed}}（上限 10 MB）</text>
+      <view class="bind-actions" style="margin-top:20rpx;">
+        <view class="btn-outline-sm" bindtap="clearStorage"><text>清除缓存</text></view>
+        <text class="storage-hint">对话记录不受影响</text>
+      </view>
+    </view>
+  </view>
+
+  <!-- ══ 保存 ══ -->
+  <button class="btn-pink save-btn" bindtap="saveProfile">💾 保存所有设置</button>
+
+  <!-- ══ 关于 ══ -->
+  <view class="about-section">
+    <text class="about-title">🌸 关于「我们的空间」</text>
+    <text class="about-text">小爱是一个 AI 驱动的恋爱伴侣</text>
+    <text class="about-text">由 DeepSeek 提供智能大脑 · 5重保护机制守护隐私</text>
+    <text class="about-version">v2.3.0 · Made with 💕</text>
+  </view>
+
+  <view style="height:48rpx;"></view>
+</view>

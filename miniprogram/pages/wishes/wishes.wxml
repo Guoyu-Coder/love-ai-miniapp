@@ -1,0 +1,53 @@
+<!-- ♥ 愿望清单 -->
+<view class="page">
+
+  <view class="card wish-form">
+    <text class="form-title">添加新的愿望 ✨</text>
+    <input class="input-box" placeholder="想一起做什么？" value="{{newTitle}}" bindinput="onTitleInput" />
+    <view style="display:flex;gap:12rpx;margin-top:12rpx;">
+      <input class="input-box flex-1" placeholder="描述（可选）" value="{{newDesc}}" bindinput="onDescInput" />
+    </view>
+    <view class="form-actions">
+      <view class="cat-picker">
+        <view class="cat-item {{newCat === '旅行' ? 'active' : ''}}" bindtap="pickCat" data-cat="旅行">旅行</view>
+        <view class="cat-item {{newCat === '美食' ? 'active' : ''}}" bindtap="pickCat" data-cat="美食">美食</view>
+        <view class="cat-item {{newCat === '学习' ? 'active' : ''}}" bindtap="pickCat" data-cat="学习">学习</view>
+        <view class="cat-item {{newCat === '生活' ? 'active' : ''}}" bindtap="pickCat" data-cat="生活">生活</view>
+        <view class="cat-item {{newCat === '其他' ? 'active' : ''}}" bindtap="pickCat" data-cat="其他">其他</view>
+      </view>
+      <view class="btn-pink add-btn" bindtap="addWish">添加</view>
+    </view>
+  </view>
+
+  <!-- 愿望列表 -->
+  <block wx:for="{{wishes}}" wx:key="_id">
+    <view class="card wish-item {{item.status === 'done' ? 'done' : ''}}">
+      <view class="wish-top">
+        <text class="wish-cat tag">{{item.category}}</text>
+        <text class="wish-status" wx:if="{{item.status === 'done'}}">✅ 已实现</text>
+        <view class="wish-toggle" wx:else bindtap="toggleWish" data-id="{{item._id}}">
+          <text>标记完成</text>
+        </view>
+        <view class="wish-delete" bindtap="deleteWish" data-id="{{item._id}}">
+          <text>✕</text>
+        </view>
+      </view>
+      <text class="wish-title">{{item.title}}</text>
+      <text class="wish-desc" wx:if="{{item.description}}">{{item.description}}</text>
+
+      <!-- AI 攻略 -->
+      <view class="wish-ai" wx:if="{{item.aiTip}}">
+        <text class="ai-tip-text">💡 小爱建议：{{item.aiTip}}</text>
+      </view>
+      <view class="wish-ask-ai" wx:else bindtap="askAITip" data-item="{{item}}">
+        <text>让小爱帮我出出主意 🤖</text>
+      </view>
+    </view>
+  </block>
+
+  <view class="empty-state" wx:if="{{wishes.length === 0}}">
+    <text class="icon">✨</text>
+    <text>还没有共同愿望～</text>
+    <text style="color:var(--text-light);font-size:24rpx;margin-top:8rpx;">把想一起做的事写下来吧</text>
+  </view>
+</view>

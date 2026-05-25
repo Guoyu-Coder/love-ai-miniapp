@@ -1,0 +1,82 @@
+<!-- ♥ 成就殿堂 -->
+<view class="page page-enter">
+
+  <!-- ══ 加载态 ══ -->
+  <block wx:if="{{loading}}">
+    <view class="loading-state">
+      <view class="skeleton" style="width:200rpx;height:200rpx;border-radius:50%;margin:60rpx auto;"></view>
+      <view class="skeleton skeleton-line" style="width:60%;margin:24rpx auto;"></view>
+    </view>
+  </block>
+
+  <!-- ══ 成就殿堂 ══ -->
+  <block wx:else>
+    <!-- 头部光环 -->
+    <view class="ach-hero">
+      <view class="ach-hero-ring {{percent >= 100 ? 'all-done' : ''}}">
+        <view class="ach-hero-inner">
+          <text class="ach-hero-num">{{unlockedCount}}<text class="ach-hero-total">/{{totalCount}}</text></text>
+          <text class="ach-hero-label">已解锁成就</text>
+        </view>
+        <!-- 环形进度条 -->
+        <view class="ring-progress" wx:if="{{percent < 100}}">
+          <view class="ring-half ring-left">
+            <view class="ring-fill" style="transform: rotate({{percent > 50 ? (percent - 50) * 3.6 : 0}}deg);"></view>
+          </view>
+          <view class="ring-half ring-right">
+            <view class="ring-fill" style="transform: rotate({{percent * 3.6 > 180 ? 180 : percent * 3.6}}deg);"></view>
+          </view>
+        </view>
+        <view class="ring-progress ring-done" wx:else>
+          <view class="ring-half ring-left"><view class="ring-fill" style="transform: rotate(180deg);"></view></view>
+          <view class="ring-half ring-right"><view class="ring-fill" style="transform: rotate(180deg);"></view></view>
+        </view>
+      </view>
+
+      <text class="ach-hero-sub">
+        {{percent >= 100 ? '🎉 恭喜！全部成就已解锁，你们是恋爱大师！' : percent >= 50 ? '💪 已经过半了，继续创造美好回忆吧～' : '🌟 多多互动解锁更多成就勋章吧～'}}
+      </text>
+    </view>
+
+    <!-- 成就卡片网格 -->
+    <view class="ach-grid">
+      <view
+        class="ach-card {{item.unlocked ? 'unlocked' : 'locked'}} card-stagger"
+        wx:for="{{achievements}}"
+        wx:key="id"
+        style="animation-delay:{{index * 0.08}}s;"
+        bindtap="onBadgeTap"
+        data-item="{{item}}"
+      >
+        <!-- 解锁光晕 -->
+        <view class="ach-card-glow" wx:if="{{item.unlocked}}"></view>
+
+        <!-- 图标 -->
+        <view class="ach-card-icon-wrap {{item.unlocked ? '' : 'locked-icon'}}">
+          <text class="ach-card-icon">{{item.unlocked ? item.icon : '🔒'}}</text>
+        </view>
+
+        <!-- 名称 -->
+        <text class="ach-card-name">{{item.unlocked ? item.name : '???'}}</text>
+
+        <!-- 描述 -->
+        <text class="ach-card-desc">{{item.unlocked ? item.desc : '继续探索来解锁吧'}}</text>
+
+        <!-- 进度条 -->
+        <view class="ach-card-progress" wx:if="{{!item.unlocked}}">
+          <view class="ach-card-progress-bar">
+            <view class="ach-card-progress-fill" style="width:{{item.progress / item.target * 100}}%;"></view>
+          </view>
+          <text class="ach-card-progress-text">{{item.progress}}/{{item.target}}</text>
+        </view>
+
+        <!-- 已解锁标记 -->
+        <view class="ach-card-badge" wx:if="{{item.unlocked}}">
+          <text>✨ 已解锁</text>
+        </view>
+      </view>
+    </view>
+  </block>
+
+  <view style="height:48rpx;"></view>
+</view>
