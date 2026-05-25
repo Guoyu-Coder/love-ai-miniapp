@@ -1,10 +1,10 @@
 {
-  "triggers": [
-    { "name": "morningGreeting", "type": "timer", "config": "0 0 8 * * * *" },
-    { "name": "nightGreeting", "type": "timer", "config": "0 0 22 * * * *" }
-  ],
+  "permissions": {
+    "openapi": []
+  },
   "env": {
-    "DEEPSEEK_KEY": "sk-056af2f3c3ef462584fbe24bd24643af",
+    "DEEPSEEK_KEY": "",
     "DEEPSEEK_BASE_URL": "https://api.deepseek.com"
-  }
+  },
+  "timeout": 60
 }
