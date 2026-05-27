@@ -155,26 +155,16 @@ Page({
 
     wx.vibrateShort({ type: 'light' });
 
-    const conv = this.agent.getActiveConv();
-    const oldTitle = conv ? conv.title : '小爱 AI';
-
-    // 同步写入 agent 的会话对象（sendStream 从 conv.messages 读取最后一条 user 消息）
-    if (conv) {
-      conv.messages.push({ role: 'user', content: text });
-      conv.updatedAt = Date.now();
-    }
-
     this.setData({
       messages: [...this.data.messages, { role: 'user', content: text }],
       inputText: '',
       thinking: true,
       toolHint: '',
-      currentTitle: oldTitle,
       thinkingSteps: [],
       showSteps: false
     });
 
-    // 添加一个空的 assistant 消息占位（流式写入目标）
+    // 添加一个空的 assistant 消息占位
     this.setData({
       messages: [...this.data.messages, { role: 'assistant', content: '' }]
     });
@@ -187,34 +177,20 @@ Page({
       }
     };
 
-    let streamDone = false;
-    // 超时回退：8秒内没收到任何 chunk 则回退到 HTTP
-    const fallbackTimer = setTimeout(() => {
-      if (!streamDone) {
-        this.fallbackToHttp(text, updateMsg);
+    // 统一走 API 层（云函数优先）
+    const result = await this.agent.send(text);
+    if (result) {
+      if (result.toolCalls > 0) {
+        this.setData({ toolHint: `小爱使用了 ${result.toolCalls} 个工具来帮你～` });
+        setTimeout(() => this.setData({ toolHint: '' }), 3000);
       }
-    }, 8000);
-
-    this.agent.sendStream(
-      (chunk, fullText) => {
-        clearTimeout(fallbackTimer);
-        updateMsg(fullText);
-      },
-      (steps) => {
-        clearTimeout(fallbackTimer);
-        this.setData({ thinkingSteps: steps, showSteps: true });
-      },
-      (result) => {
-        streamDone = true;
-        clearTimeout(fallbackTimer);
-        if (result.toolCalls > 0) {
-          this.setData({ toolHint: `小爱使用了 ${result.toolCalls} 个工具来帮你～` });
-          setTimeout(() => this.setData({ toolHint: '' }), 3000);
-        }
-        this.refreshUI();
-        this.setData({ thinking: false });
+      if (result.steps && result.steps.length > 0) {
+        this.setData({ thinkingSteps: result.steps, showSteps: true });
       }
-    );
+      updateMsg(result.reply);
+      this.refreshUI();
+    }
+    this.setData({ thinking: false });
   },
 
   async fallbackToHttp(text, updateMsg) {

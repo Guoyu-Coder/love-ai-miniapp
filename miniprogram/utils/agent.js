@@ -1,6 +1,7 @@
 // ── Agent 客户端（多对话管理 + 持久化）──
 
 const app = getApp();
+const api = require('./api');
 const STORAGE_KEY = 'love_conversations';
 
 function cleanMarkdown(text) {
@@ -165,23 +166,12 @@ class AgentClient {
         .slice(-20)
         .map(m => ({ role: m.role, content: m.content }));
 
-      const endpoint = (app && app.globalData && app.globalData.agent && app.globalData.agent.endpoint)
-        || 'http://localhost:3001/api/agent';
-
       const settings = (app && app.globalData && app.globalData.settings) || {};
       const nick1 = settings.nick1Custom || settings.nick1 || '';
       const nick2 = settings.nick2Custom || settings.nick2 || '';
 
-      const result = await new Promise((resolve) => {
-        wx.request({
-          url: endpoint,
-          method: 'POST',
-          data: { action: 'chat', message, history, conversationId: conv.id, nick1, nick2 },
-          timeout: 30000,
-          success(r) { resolve(r.data); },
-          fail(err) { resolve({ success: false, error: err.errMsg }); }
-        });
-      });
+      // 走统一 API 层（云函数优先 → 降级本地服务器）
+      const result = await api.chat(message, history, { nick1, nick2 });
 
       if (result.success) {
         const cleanReply = cleanMarkdown(result.reply);
